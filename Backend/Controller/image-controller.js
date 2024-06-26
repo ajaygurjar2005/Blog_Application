@@ -41,7 +41,7 @@ const getImage = async (req, res) => {
         return res.status(404).json({ error: 'Image not found' });
       }
       
-      const imagePath = path.join(__dirname, '..', 'tmp', filename);
+      const imagePath = path.join(__dirname, '..', 'uploads', filename);
       
       res.setHeader('Content-Type', 'image/jpeg');
   
