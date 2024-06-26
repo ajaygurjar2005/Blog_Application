@@ -23,34 +23,39 @@ const signupUser = async (req, res) => {
 }
 
 const loginUser = async (req, res) => {
-    const user = await User.findOne({ username: req.body.username })
-
-    if (!user) {
-        return res.status(400).json({ msg: "Username do not match" })
-    }
-
     try {
-        const match = bcrypt.compare(req.body.password,user.password);
-        
-        if(match){
-            
-            const accessToken = jwt.sign(user.toJSON(),process.env.ACCESS_SECRET_KEY , {expiresIn:'15m'})
-            const refreshToken = jwt.sign(user.toJSON(),process.env.REFRESH_SECRET_KEY)
-            
-            const newtoken = new token({token:refreshToken})
-            await newtoken.save();
-            console.log("just bhad")
+        const user = await User.findOne({ username: req.body.username });
 
-            return res.status(200).json({accessToken:accessToken,refreshToken:refreshToken,name:user.name,username:user.username})
-
-        }else{
-             return res.status(400).json({msg:"Sorry password cannot match"});
+        if (!user) {
+            return res.status(400).json({ msg: "Username does not match" });
         }
+
+        // Compare passwords
+        const match = await bcrypt.compare(req.body.password, user.password);
+
+        if (match) {
+            // Generate tokens
+            const accessToken = jwt.sign(user.toJSON(), process.env.ACCESS_SECRET_KEY, { expiresIn: '15m' });
+            const refreshToken = jwt.sign(user.toJSON(), process.env.REFRESH_SECRET_KEY);
+
+            // Save refresh token
+            const newToken = new Token({ token: refreshToken });
+            await newToken.save();
+
+            return res.status(200).json({
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+                name: user.name,
+                username: user.username
+            });
+        } else {
+            return res.status(400).json({ msg: "Password does not match" });
+        }
+    } catch (err) {
+        console.error("Error while logging in user:", err);
+        return res.status(500).json({ msg: "Error while logging in user" });
     }
-    catch (err) {
-        return res.status(500).json({msg:"Error while login in user"})
-    }
-}
+};
 
 
 
