@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 
 const Router = express.Router();
+Router.get('/', (req, res) => {
+  res.status(200).send('Hello, this is a test endpoint!');
+});
 const {signupUser ,loginUser} = require("../Controller/Usercontroller.js")
 const {uploadImage,getImage} = require("../Controller/image-controller.js")
 const { createPost, getAllPosts,getPost ,updatePost,deletePost} = require("../Controller/post-controller.js")
