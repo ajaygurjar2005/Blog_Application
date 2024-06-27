@@ -10,13 +10,13 @@
     {
       "src": "/api/(.*)",
       "dest": "index.js",
-      "methods": ["GET", "POST"] // Include other methods your API supports
+      "methods": ["GET", "POST"]
     }
   ],
   "functions": {
     "api/*": {
-      "memory": 512, // Example memory configuration
-      "maxDuration": 10 // Example max duration in seconds
+      "memory": 512, 
+      "maxDuration": 10 
     }
   }
 }
