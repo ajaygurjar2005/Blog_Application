@@ -10,9 +10,7 @@ dotenv.config();
 // const password = process.env.DB_PASSWORD;
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-    cb(null, '/tmp');  // Use the writable /tmp directory
-  },
+  destination: './uploads/',
     filename: function (req, file, cb) {
       cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     },
